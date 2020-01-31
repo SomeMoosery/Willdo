@@ -1,7 +1,7 @@
 pragma solidity >=0.4.21 <0.7.0;
 
 contract Willdo {
-    // Chore count... very naiive ID for the time being 
+    // Chore count... very naiive ID for the time being
     uint public choreCount = 0;
 
     // Chore object - the crux of what each person will do
