@@ -6,7 +6,17 @@ import getWeb3 from "./getWeb3";
 import "./App.css";
 
 class App extends Component {
-  state = { choreCount: 0, web3: null, accounts: null, contract: null };
+  state = {
+    choreCount: 0,
+    web3: null,
+    accounts: null,
+    contract: null,
+    choreName: "",
+    daysToComplete: 0,
+    approver: "",
+    chorePrice: 0,
+    chores: [],
+  };
 
   componentDidMount = async () => {
     try {
@@ -29,10 +39,8 @@ class App extends Component {
       );
       console.log('Instance:', instance);
 
-      // Set web3, accounts, and contract to the state, and then proceed with an
-      // example of interacting with the contract's methods.
-      // this.setState({ web3, accounts, contract: instance }, this.runExample);
-      this.setState({web3, accounts, contract: instance });
+      // Set web3, accounts, and contract to the state
+      this.setState({ web3, accounts, contract: instance });
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
@@ -53,28 +61,88 @@ class App extends Component {
         choreCount: response
       });
     })
+
+    this.setState({
+      choreName: "",
+      daysToComplete: 0,
+      approver: "",
+      chorePrice: 0,
+      chores: [],
+    })
+
+    for (var i = 0; i < choreCount; i++) {
+      const chore = await this.state.web3.methods.chores(i).call()
+      this.setState({
+        chores: [...this.state.chores, chore],
+      })
+    }
   }
 
-  runExample = async () => {
-    const { accounts, contract } = this.state;
+  // Update chore creation variables' state
+  handleChange(event) {
+    this.setState({
+      [event.target.id]: event.target.value
+    })
+  }
 
-    // Stores a given value, 5 by default.
-    await contract.methods.set(5).send({ from: accounts[0] });
+  // Create a chore on form submit
+  async createChore(e) {
 
-    // Get the value from the contract to prove it worked.
-    const response = await contract.methods.get().call();
+    // Prevent automatic reload onSubmit
+    e.preventDefault();
 
-    // Update state with the result.
-    this.setState({ storageValue: response });
-  };
+    // Variables for ease of use
+    const content = this.state.choreName;
+    const chorePrice = this.state.chorePrice;
+    const daysToComplete = this.state.daysToComplete;
+    const approver = this.state.approver;
+    var account = "";
+    await this.state.web3.eth.getAccounts().then((acct) => {
+      account = acct[0]
+    })
+
+    // Send eth to chore creation contract
+    await this.state.web3.eth.sendTransaction({
+      from: "0x0b9fb8FA6a82ba7eFDbFFfB0c7ff5350932e5514",
+      to: "0x60729F6376884E2739c867Fcd134d37C8b9Df433",
+      value: this.state.web3.utils.toWei(chorePrice, "ether")
+    }).on('error', () => {
+      alert(`ERROR!!!!`)
+      // window.location.reload()
+    })
+
+    // Create chore in contract
+    await this.state.contract.methods.get().createChore().call(content, parseInt(chorePrice), parseInt(daysToComplete), approver)
+  }
 
   render() {
     if (!this.state.web3) {
-      return <div>Loading Web3, accounts, and contract...</div>;
+      return <h1>Loading Web3, accounts, and contract...</h1>;
     }
     return (
       <div className="App">
         <h2>Willdo - You'll do it if there's money on the line</h2>
+        <form onSubmit={(e) => this.createChore(e)}>
+          <input id="choreName" value={this.state.value} onChange={(e) => this.handleChange(e)} type="text" placeholder="What's the chore?" required /><br />
+          <input id="daysToComplete" value={this.state.value} onChange={(e) => this.handleChange(e)} type="number" placeholder="How many days is the deadline?" required /><br />
+          <input id="approver" value={this.state.value} onChange={(e) => this.handleChange(e)} type="text" placeholder="Who's holding you accountable?" required /><br />
+          <input id="chorePrice" value={this.state.value} onChange={(e) => this.handleChange(e)} type="number" placeholder="How much ETH to attach to this?" required /><br />
+          <input type="submit" />
+        </form>
+        {this.state.chores.map((chore) => {
+          return "test"
+        })}
+        <ul id="choreList">
+          <div>
+            <label>
+              <input type="checkbox" />
+              <span>Submit a chore...</span>
+              <p id="choreApprover"></p>
+              <p id="chorePrice"></p>
+              <p id="daysRemaining"></p>
+            </label>
+          </div>
+        </ul>
       </div>
     );
   }
