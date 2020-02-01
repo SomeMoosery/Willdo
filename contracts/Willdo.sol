@@ -35,7 +35,7 @@ contract Willdo {
     // TODO eventually update memory with an implementation of IPFS so we aren't storing all this on the blockchain
     // TODO add the capability to attach eth to the transaction to hold yourself accountable
     // Create a new chore object and timelock the money
-    function createChore(string memory _content, uint _chorePrice, uint daysToComplete, address _approver) public payable {
+    function createChore(string memory _content, uint _chorePrice, uint _daysToComplete, address _approver) public payable {
 
         // Increase ID
         choreCount ++;
@@ -45,11 +45,11 @@ contract Willdo {
             choreCount,
             _chorePrice,
             _content,
-            daysToComplete,
+            _daysToComplete,
             _approver,
             false
         );
-        emit ChoreCreated(choreCount, _chorePrice, _content, daysToComplete, _approver, false);
+        emit ChoreCreated(choreCount, _chorePrice, _content, _daysToComplete, _approver, false);
 
         // TODO timelock the Ether
     }
