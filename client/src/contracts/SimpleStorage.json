@@ -556,12 +556,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0xaE68655df25499e99002AB9bBf62e56D1f116bB1",
-      "transactionHash": "0x13e3582891e9ad62cbc081277bc1f0955cc5c3c718a54f6d900f7953ba2b78cc"
+      "address": "0x34B233C6078094265F3e9D2828346e596d88fD5e",
+      "transactionHash": "0x14e8c1c199eee56f913388188f9da3fc35f666694a91bc3e77ac20c5ba5203b4"
     }
   },
   "schemaVersion": "3.0.1",
-  "updatedAt": "2020-01-29T01:40:33.303Z",
+  "updatedAt": "2020-02-04T02:31:13.875Z",
   "devdoc": {
     "methods": {}
   },

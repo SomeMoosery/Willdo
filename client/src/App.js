@@ -25,19 +25,14 @@ class App extends Component {
 
       // Use web3 to get the user's accounts.
       const accounts = await web3.eth.getAccounts();
-      console.log('Accounts (Your Metamask wallet):', accounts);
 
       // Get the contract instance.
       const networkId = await web3.eth.net.getId();
-      console.log('Network ID (from Ganache):', networkId);
       const deployedNetwork = Willdo.networks[networkId];
-      console.log('Address is the address of the contract, transactionHash is the is the hash is the transaction that created the contract');
-      console.log('Deployed Network:', deployedNetwork);
       const instance = new web3.eth.Contract(
         Willdo.abi,
         deployedNetwork && deployedNetwork.address,
       );
-      console.log('Instance:', instance);
 
       // Set web3, accounts, and contract to the state
       this.setState({ web3, accounts, contract: instance });
@@ -48,7 +43,6 @@ class App extends Component {
       );
       console.error(error);
     }
-    console.log('State:', this.state);
 
     // Get our current choreCount
     const choreCount = await this.state.contract.methods.choreCount();
@@ -61,6 +55,7 @@ class App extends Component {
         choreCount: response
       });
     })
+
 
     this.setState({
       choreName: "",
@@ -103,16 +98,16 @@ class App extends Component {
 
     // Send eth to chore creation contract
     await this.state.web3.eth.sendTransaction({
-      from: "0x0b9fb8FA6a82ba7eFDbFFfB0c7ff5350932e5514",
-      to: "0x60729F6376884E2739c867Fcd134d37C8b9Df433",
+      from: account,
+      to: "0xCB4D507d869ab4Bff4422Ce209D429d424893f25",
       value: this.state.web3.utils.toWei(chorePrice, "ether")
     }).on('error', () => {
-      alert(`ERROR!!!!`)
-      // window.location.reload()
+      alert('Error, or you rejected the transaction')
+      window.location.reload()
     })
 
-    // Create chore in contract
-    await this.state.contract.methods.get().createChore().call(content, parseInt(chorePrice), parseInt(daysToComplete), approver)
+    // Create the chore on the contract
+    await this.state.contract.methods.createChore(content, chorePrice, daysToComplete, approver).send({ from: account })
   }
 
   render() {
