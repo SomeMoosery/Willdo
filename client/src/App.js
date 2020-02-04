@@ -48,12 +48,25 @@ class App extends Component {
     const choreCount = await this.state.contract.methods.choreCount();
     choreCount.call((err, response) => {
       if (err != null) {
-        alert(`Failed to fetch choreCount.`);
+        alert('Failed to fetch choreCount.');
       }
       console.log('Number of chores:', response);
       this.setState({
         choreCount: response
       });
+    }).then(() => {
+      for (var i = 0; i < this.state.choreCount; i++) {
+        // ! NOTE remember we didn't 0-index our chore IDs for some fucking reason 
+        this.state.contract.methods.chores(i+1).call((err, response) => {
+          console.log(response)
+          if (err != null) {
+            alert('Failed to fetch chore.');
+          }
+          this.setState({
+            chores: [...this.state.chores, response],
+          })
+        })
+      }
     })
 
 
@@ -62,15 +75,7 @@ class App extends Component {
       daysToComplete: 0,
       approver: "",
       chorePrice: 0,
-      chores: [],
     })
-
-    for (var i = 0; i < choreCount; i++) {
-      const chore = await this.state.web3.methods.chores(i).call()
-      this.setState({
-        chores: [...this.state.chores, chore],
-      })
-    }
   }
 
   // Update chore creation variables' state
@@ -112,7 +117,8 @@ class App extends Component {
 
   render() {
     if (!this.state.web3) {
-      return <h1>Loading Web3, accounts, and contract...</h1>;
+      // Loading web3, accounts, contract
+      return <h1 style={{textAlign:'center', marginTop:'10em'}}>Loading...</h1>;
     }
     return (
       <div className="App">
