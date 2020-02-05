@@ -6,6 +6,7 @@ class ChoreList extends React.Component {
         return (
             <div>
                 {this.props.chores.map((chore) => {
+                    // ! TODO programatically create table
                     return <Chore 
                         key={chore.id}
                         choreName={chore.content}

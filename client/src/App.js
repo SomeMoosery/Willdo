@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Willdo from './contracts/Willdo.json';
 import getWeb3 from './getWeb3';
 import ChoreList from './components/ChoreList';
+import { Form, Input, Button, InputNumber } from 'antd';
+
 
 import "./App.css";
 
@@ -56,7 +58,7 @@ class App extends Component {
     }).then(() => {
       for (var i = 0; i < this.state.choreCount; i++) {
         // ! NOTE remember we didn't 0-index our chore IDs for some fucking reason 
-        this.state.contract.methods.chores(i+1).call((err, response) => {
+        this.state.contract.methods.chores(i + 1).call((err, response) => {
           if (err != null) {
             alert('Failed to fetch chore.');
           }
@@ -116,19 +118,39 @@ class App extends Component {
   render() {
     if (!this.state.web3) {
       // Loading web3, accounts, contract
-      return <h1 style={{textAlign:'center', marginTop:'10em'}}>Loading...</h1>;
+      return <h1 style={{ textAlign: 'center', marginTop: '10em' }}>Loading...</h1>;
     }
+
     return (
       <div className="App">
         <h2>Willdo - You'll do it if there's money on the line</h2>
-        <form onSubmit={(e) => this.createChore(e)}>
+        <Form layout="inline" onSubmit={(e) => this.createChore(e)}>
+          <Form.Item>
+            <Input placeholder="Chore" />
+          </Form.Item>
+          <Form.Item>
+            <InputNumber placeholder="How long?" defaultValue={0} />
+          </Form.Item>
+          <Form.Item>
+            <Input placeholder="Approver?" />
+          </Form.Item>
+          <Form.Item>
+            <InputNumber defaultValue={0} />
+          </Form.Item><br/>
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              Submit
+          </Button>
+          </Form.Item>
+        </Form>
+        {/* <form onSubmit={(e) => this.createChore(e)}>
           <input id="choreName" value={this.state.value} onChange={(e) => this.handleChange(e)} type="text" placeholder="What's the chore?" required /><br />
           <input id="daysToComplete" value={this.state.value} onChange={(e) => this.handleChange(e)} type="number" placeholder="How many days is the deadline?" required /><br />
           <input id="approver" value={this.state.value} onChange={(e) => this.handleChange(e)} type="text" placeholder="Who's holding you accountable?" required /><br />
           <input id="chorePrice" value={this.state.value} onChange={(e) => this.handleChange(e)} type="number" placeholder="How much ETH to attach to this?" required /><br />
           <input type="submit" />
-        </form>
-        <ChoreList chores={this.state.chores}/>
+        </form> */}
+        <ChoreList chores={this.state.chores} />
       </div>
     );
   }
