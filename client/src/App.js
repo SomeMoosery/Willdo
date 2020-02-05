@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-// import SimpleStorageContract from "./contracts/SimpleStorage.json";
+import React, { Component } from 'react';
 import Willdo from './contracts/Willdo.json';
-import getWeb3 from "./getWeb3";
+import getWeb3 from './getWeb3';
+import ChoreList from './components/ChoreList';
 
 import "./App.css";
 
@@ -50,7 +50,6 @@ class App extends Component {
       if (err != null) {
         alert('Failed to fetch choreCount.');
       }
-      console.log('Number of chores:', response);
       this.setState({
         choreCount: response
       });
@@ -58,7 +57,6 @@ class App extends Component {
       for (var i = 0; i < this.state.choreCount; i++) {
         // ! NOTE remember we didn't 0-index our chore IDs for some fucking reason 
         this.state.contract.methods.chores(i+1).call((err, response) => {
-          console.log(response)
           if (err != null) {
             alert('Failed to fetch chore.');
           }
@@ -130,20 +128,7 @@ class App extends Component {
           <input id="chorePrice" value={this.state.value} onChange={(e) => this.handleChange(e)} type="number" placeholder="How much ETH to attach to this?" required /><br />
           <input type="submit" />
         </form>
-        {this.state.chores.map((chore) => {
-          return "test"
-        })}
-        <ul id="choreList">
-          <div>
-            <label>
-              <input type="checkbox" />
-              <span>Submit a chore...</span>
-              <p id="choreApprover"></p>
-              <p id="chorePrice"></p>
-              <p id="daysRemaining"></p>
-            </label>
-          </div>
-        </ul>
+        <ChoreList chores={this.state.chores}/>
       </div>
     );
   }
