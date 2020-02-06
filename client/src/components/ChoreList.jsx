@@ -11,7 +11,9 @@ class ChoreList extends React.Component {
                         key={chore.id}
                         choreName={chore.content}
                         daysToComplete={chore.daysToComplete}
-                        approver={chore.approver}
+                        // approver={chore.approver}
+                        startTime={chore.startTime}
+                        endTime={chore.endTime}
                         price={chore.price}
                     />
                 })}

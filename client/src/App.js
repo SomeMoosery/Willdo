@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Willdo from './contracts/Willdo.json';
 import getWeb3 from './getWeb3';
 import ChoreList from './components/ChoreList';
-import { Form, Input, Button, InputNumber } from 'antd';
+// import { Form, Input, Button, InputNumber } from 'antd';
 
 
 import "./App.css";
@@ -15,7 +15,7 @@ class App extends Component {
     contract: null,
     choreName: "",
     daysToComplete: 0,
-    approver: "",
+    // approver: "",
     chorePrice: 0,
     chores: [],
   };
@@ -41,7 +41,7 @@ class App extends Component {
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
-        `Failed to load web3, accounts, or contract. Check console for details.`,
+        'Failed to load web3, accounts, or contract. Check console for details.'
       );
       console.error(error);
     }
@@ -73,7 +73,7 @@ class App extends Component {
     this.setState({
       choreName: "",
       daysToComplete: 0,
-      approver: "",
+      // approver: "",
       chorePrice: 0,
     })
   }
@@ -95,7 +95,7 @@ class App extends Component {
     const content = this.state.choreName;
     const chorePrice = this.state.chorePrice;
     const daysToComplete = this.state.daysToComplete;
-    const approver = this.state.approver;
+    // const approver = this.state.approver;
     var account = "";
     await this.state.web3.eth.getAccounts().then((acct) => {
       account = acct[0]
@@ -104,15 +104,22 @@ class App extends Component {
     // Send eth to chore creation contract
     await this.state.web3.eth.sendTransaction({
       from: account,
-      to: "0xCB4D507d869ab4Bff4422Ce209D429d424893f25",
+      to: "0xb80665b9b19EdD441e4EFaB7EA375Ce82b4785fe",
       value: this.state.web3.utils.toWei(chorePrice, "ether")
     }).on('error', () => {
       alert('Error, or you rejected the transaction')
       window.location.reload()
     })
 
+    // Get times to use for streak... there's 86400000ms in 1 day
+    const currTimeStart = new Date().getTime()
+    const currTimeEnd = currTimeStart + (daysToComplete * 86400000);
+
     // Create the chore on the contract
-    await this.state.contract.methods.createChore(content, chorePrice, daysToComplete, approver).send({ from: account })
+    // await this.state.contract.methods.createChore(content, chorePrice, daysToComplete, approver).send({ from: account })
+    await this.state.contract.methods.createChore(content, chorePrice, currTimeStart, currTimeEnd).send({ from: account }).on('receipt', () => {
+      window.location.reload()
+    })
   }
 
   render() {
@@ -124,7 +131,7 @@ class App extends Component {
     return (
       <div className="App">
         <h2>Willdo - You'll do it if there's money on the line</h2>
-        <Form layout="inline" onSubmit={(e) => this.createChore(e)}>
+        {/* <Form layout="inline" onSubmit={(e) => this.createChore(e)}>
           <Form.Item>
             <Input placeholder="Chore" />
           </Form.Item>
@@ -142,14 +149,14 @@ class App extends Component {
               Submit
           </Button>
           </Form.Item>
-        </Form>
-        {/* <form onSubmit={(e) => this.createChore(e)}>
+        </Form> */}
+        <form onSubmit={(e) => this.createChore(e)}>
           <input id="choreName" value={this.state.value} onChange={(e) => this.handleChange(e)} type="text" placeholder="What's the chore?" required /><br />
           <input id="daysToComplete" value={this.state.value} onChange={(e) => this.handleChange(e)} type="number" placeholder="How many days is the deadline?" required /><br />
-          <input id="approver" value={this.state.value} onChange={(e) => this.handleChange(e)} type="text" placeholder="Who's holding you accountable?" required /><br />
+          {/* <input id="approver" value={this.state.value} onChange={(e) => this.handleChange(e)} type="text" placeholder="Who's holding you accountable?" required /><br /> */}
           <input id="chorePrice" value={this.state.value} onChange={(e) => this.handleChange(e)} type="number" placeholder="How much ETH to attach to this?" required /><br />
           <input type="submit" />
-        </form> */}
+        </form>
         <ChoreList chores={this.state.chores} />
       </div>
     );

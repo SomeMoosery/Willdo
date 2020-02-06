@@ -9,8 +9,10 @@ contract Willdo {
         uint id; // UID of each chore
         uint price; // How much you're willing to risk on completing this chore
         string content; // The chore to complete
-        uint daysToComplete; // Days to complete the chore
-        address approver; // The person responsible for approving the Chore was actually completed
+        // uint daysToComplete; // Days to complete the chore
+        //address approver; // The person responsible for approving the Chore was actually completed
+        uint startTime;
+        uint endTime;
         bool completed; // Whether or not the chore is completed
     }
 
@@ -18,15 +20,15 @@ contract Willdo {
         uint id,
         uint price,
         string content,
-        uint daysToComplete,
-        address approver,
+        // uint daysToComplete,
+        uint startTime,
+        uint endTime,
         bool completed
     );
 
     event ChoreCompleted(
         uint id,
-        bool completed,
-        address approver
+        bool completed
     );
 
     // List of chores by ID
@@ -35,7 +37,8 @@ contract Willdo {
     // TODO eventually update memory with an implementation of IPFS so we aren't storing all this on the blockchain
     // TODO add the capability to attach eth to the transaction to hold yourself accountable
     // Create a new chore object and timelock the money
-    function createChore(string memory _content, uint _chorePrice, uint daysToComplete, address _approver) public payable {
+    // TODO re-add _approver if we want to have a beneficiary, but for now we're just going self-motivated
+    function createChore(string memory _content, uint _chorePrice, uint _startTime, uint _endTime) public payable {
 
         // Increase ID
         choreCount ++;
@@ -45,11 +48,11 @@ contract Willdo {
             choreCount,
             _chorePrice,
             _content,
-            daysToComplete,
-            _approver,
+            _startTime,
+            _endTime,
             false
         );
-        emit ChoreCreated(choreCount, _chorePrice, _content, daysToComplete, _approver, false);
+        emit ChoreCreated(choreCount, _chorePrice, _content, _startTime, _endTime, false);
 
         // TODO timelock the Ether
     }
@@ -62,7 +65,7 @@ contract Willdo {
 
         _chore.completed = true;
         chores[_id] = _chore;
-        emit ChoreCompleted(_id, _chore.completed, _chore.approver);
+        emit ChoreCompleted(_id, _chore.completed);
 
         // TODO get the eth from the timelock and return it to the user
     }
