@@ -15,7 +15,6 @@ class App extends Component {
     contract: null,
     choreName: "",
     daysToComplete: 0,
-    // approver: "",
     chorePrice: 0,
     chores: [],
   };
@@ -73,7 +72,6 @@ class App extends Component {
     this.setState({
       choreName: "",
       daysToComplete: 0,
-      // approver: "",
       chorePrice: 0,
     })
   }
@@ -95,7 +93,6 @@ class App extends Component {
     const content = this.state.choreName;
     const chorePrice = this.state.chorePrice;
     const daysToComplete = this.state.daysToComplete;
-    // const approver = this.state.approver;
     var account = "";
     await this.state.web3.eth.getAccounts().then((acct) => {
       account = acct[0]
@@ -116,7 +113,6 @@ class App extends Component {
     const currTimeEnd = currTimeStart + (daysToComplete * 86400000);
 
     // Create the chore on the contract
-    // await this.state.contract.methods.createChore(content, chorePrice, daysToComplete, approver).send({ from: account })
     await this.state.contract.methods.createChore(content, chorePrice, currTimeStart, currTimeEnd).send({ from: account }).on('receipt', () => {
       window.location.reload()
     })
@@ -139,9 +135,6 @@ class App extends Component {
             <InputNumber placeholder="How long?" defaultValue={0} />
           </Form.Item>
           <Form.Item>
-            <Input placeholder="Approver?" />
-          </Form.Item>
-          <Form.Item>
             <InputNumber defaultValue={0} />
           </Form.Item><br/>
           <Form.Item>
@@ -153,7 +146,6 @@ class App extends Component {
         <form onSubmit={(e) => this.createChore(e)}>
           <input id="choreName" value={this.state.value} onChange={(e) => this.handleChange(e)} type="text" placeholder="What's the chore?" required /><br />
           <input id="daysToComplete" value={this.state.value} onChange={(e) => this.handleChange(e)} type="number" placeholder="How many days is the deadline?" required /><br />
-          {/* <input id="approver" value={this.state.value} onChange={(e) => this.handleChange(e)} type="text" placeholder="Who's holding you accountable?" required /><br /> */}
           <input id="chorePrice" value={this.state.value} onChange={(e) => this.handleChange(e)} type="number" placeholder="How much ETH to attach to this?" required /><br />
           <input type="submit" />
         </form>

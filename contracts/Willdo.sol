@@ -9,8 +9,6 @@ contract Willdo {
         uint id; // UID of each chore
         uint price; // How much you're willing to risk on completing this chore
         string content; // The chore to complete
-        // uint daysToComplete; // Days to complete the chore
-        //address approver; // The person responsible for approving the Chore was actually completed
         uint startTime;
         uint endTime;
         bool completed; // Whether or not the chore is completed

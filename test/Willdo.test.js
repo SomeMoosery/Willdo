@@ -23,15 +23,14 @@ contract('Willdo', (accounts) => {
     })
 
     it('creates chores', async () => {
-        const result = await this.willdo.createChore('A new chore', 5, 10, "0x0b9fb8FA6a82ba7eFDbFFfB0c7ff5350932e5514")
+        const result = await this.willdo.createChore('A new chore', 5, 86400000, 172800000)
         const choreCount = await this.willdo.choreCount()
         assert.equal(choreCount, 1)
         const event = result.logs[0].args
         assert.equal(event.id.toNumber(), 1)
         assert.equal(event.content, 'A new chore')
         assert.equal(event.price.toNumber(), 5)
-        assert.equal(event.daysToComplete.toNumber(), 10)
-        assert.equal(event.approver, "0x0b9fb8FA6a82ba7eFDbFFfB0c7ff5350932e5514")
+        assert.equal
         assert.equal(event.completed, false)
     })
 
