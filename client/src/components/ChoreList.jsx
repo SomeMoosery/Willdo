@@ -14,6 +14,7 @@ class ChoreList extends React.Component {
                         startTime={chore.startTime}
                         endTime={chore.endTime}
                         price={chore.price}
+                        contract={this.props.contract}
                     />
                 })}
             </div>

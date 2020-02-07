@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Willdo from './contracts/Willdo.json';
 import getWeb3 from './getWeb3';
 import ChoreList from './components/ChoreList';
-// import { Form, Input, Button, InputNumber } from 'antd';
+import { Form, Button } from 'antd';
 
 
 import "./App.css";
@@ -101,7 +101,7 @@ class App extends Component {
     // Send eth to chore creation contract
     await this.state.web3.eth.sendTransaction({
       from: account,
-      to: "0xb80665b9b19EdD441e4EFaB7EA375Ce82b4785fe",
+      to: "0x0b9fb8FA6a82ba7eFDbFFfB0c7ff5350932e5514",
       value: this.state.web3.utils.toWei(chorePrice, "ether")
     }).on('error', () => {
       alert('Error, or you rejected the transaction')
@@ -120,36 +120,30 @@ class App extends Component {
 
   render() {
     if (!this.state.web3) {
-      // Loading web3, accounts, contract
+      // Loading web3, accounts, contract...
       return <h1 style={{ textAlign: 'center', marginTop: '10em' }}>Loading...</h1>;
     }
 
     return (
       <div className="App">
         <h2>Willdo - You'll do it if there's money on the line</h2>
-        {/* <Form layout="inline" onSubmit={(e) => this.createChore(e)}>
+        <Form layout="inline" onSubmit={(e) => this.createChore(e)}>
           <Form.Item>
-            <Input placeholder="Chore" />
-          </Form.Item>
+            <input id="choreName" value={this.state.value} onChange={(e) => this.handleChange(e)} type="text" placeholder="Streak Name" required /><br />
+          </Form.Item><br />
           <Form.Item>
-            <InputNumber placeholder="How long?" defaultValue={0} />
-          </Form.Item>
+            <input id="daysToComplete" value={this.state.value} onChange={(e) => this.handleChange(e)} type="number" placeholder="For how long?" required /><br />
+          </Form.Item><br />
           <Form.Item>
-            <InputNumber defaultValue={0} />
-          </Form.Item><br/>
+            <input id="chorePrice" value={this.state.value} onChange={(e) => this.handleChange(e)} type="number" placeholder="Wagering (ETH)?" required /><br />
+          </Form.Item><br />
           <Form.Item>
             <Button type="primary" htmlType="submit">
               Submit
           </Button>
           </Form.Item>
-        </Form> */}
-        <form onSubmit={(e) => this.createChore(e)}>
-          <input id="choreName" value={this.state.value} onChange={(e) => this.handleChange(e)} type="text" placeholder="What's the chore?" required /><br />
-          <input id="daysToComplete" value={this.state.value} onChange={(e) => this.handleChange(e)} type="number" placeholder="How many days is the deadline?" required /><br />
-          <input id="chorePrice" value={this.state.value} onChange={(e) => this.handleChange(e)} type="number" placeholder="How much ETH to attach to this?" required /><br />
-          <input type="submit" />
-        </form>
-        <ChoreList chores={this.state.chores} />
+        </Form>
+        <ChoreList chores={this.state.chores} contract={this.state.contract}/>
       </div>
     );
   }

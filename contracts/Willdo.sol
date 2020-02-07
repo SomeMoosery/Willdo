@@ -32,6 +32,13 @@ contract Willdo {
     // List of chores by ID
     mapping(uint => Chore) public chores;
 
+    // Transfers the appropriate amount of money to the charity we're currently donating to
+    function sendToCharity(uint _ethToSend, address payable _charity) public payable {
+        // address.send(ethToSend);
+        // charity.call.value(ethToSend)();
+        _charity.transfer(_ethToSend);
+    }
+
     // TODO eventually update memory with an implementation of IPFS so we aren't storing all this on the blockchain
     // TODO add the capability to attach eth to the transaction to hold yourself accountable
     // Create a new chore object and timelock the money
