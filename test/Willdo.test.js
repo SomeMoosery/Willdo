@@ -43,7 +43,17 @@ contract('Willdo', (accounts) => {
     assert.equal(event.completed, true)
     })
 
+    // TODO add more robust tests and assertions
     it('tests send to charity', async () => {
-        this.willdo.sendToCharity(1, "0x5798F4232Af37FBBa9AF51b7Ab8918376984A196")
+        const result = await this.willdo.sendToCharity(1, "0x5798F4232Af37FBBa9AF51b7Ab8918376984A196")
+        // this.willdo.sendToCharity(1, "0x5798F4232Af37FBBa9AF51b7Ab8918376984A196")
+    })
+
+    // TODO add more robust tests and assertions
+    it('returns to user', async () => {
+        const result = await this.willdo.returnToUser(1)
+        console.log(result)
+        const event = result.logs[0].args
+        assert.equal(event.amount.toNumber(), 1000000000000000000)
     })
 })

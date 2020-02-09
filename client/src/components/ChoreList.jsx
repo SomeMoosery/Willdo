@@ -15,6 +15,7 @@ class ChoreList extends React.Component {
                         endTime={chore.endTime}
                         price={chore.price}
                         contract={this.props.contract}
+                        web3={this.props.web3}
                     />
                 })}
             </div>

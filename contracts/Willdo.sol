@@ -30,20 +30,28 @@ contract Willdo {
     );
 
     event SentToCharity(
-        uint _ethToSend,
+        uint amount,
         address payable _charity
+    );
+
+    event ReturnedToUser(
+        uint amount
     );
 
     // List of chores by ID
     mapping(uint => Chore) public chores;
 
     // Transfers the appropriate amount of money to the charity we're currently donating to
-    function sendToCharity(uint _ethToSend, address payable _charity) external payable {
-        // address.send(ethToSend);
-        // charity.call.value(ethToSend)();
-        // _charity.transfer(_ethToSend);
-        _charity.transfer(1 ether);
-        emit SentToCharity(_ethToSend, _charity);
+    function sendToCharity(uint amount, address payable _charity) external payable {
+        _charity.transfer(amount * 1 ether);
+        emit SentToCharity(amount, _charity);
+    }
+
+    // TODO test to see if changing this to public will make a difference, but I feel like we want this external anyway
+    // TODO test to see if we actually need this 1 ether thing or if I was just being a dumbass before
+    function returnToUser(uint256 amount) external payable {
+        msg.sender.transfer(amount * 1 wei);
+        emit ReturnedToUser(amount);
     }
 
     // TODO eventually update memory with an implementation of IPFS so we aren't storing all this on the blockchain
