@@ -42,4 +42,8 @@ contract('Willdo', (accounts) => {
     assert.equal(event.id.toNumber(), 1)
     assert.equal(event.completed, true)
     })
+
+    it('tests send to charity', async () => {
+        this.willdo.sendToCharity(1, "0x5798F4232Af37FBBa9AF51b7Ab8918376984A196")
+    })
 })

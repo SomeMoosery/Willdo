@@ -29,14 +29,21 @@ contract Willdo {
         bool completed
     );
 
+    event SentToCharity(
+        uint _ethToSend,
+        address payable _charity
+    );
+
     // List of chores by ID
     mapping(uint => Chore) public chores;
 
     // Transfers the appropriate amount of money to the charity we're currently donating to
-    function sendToCharity(uint _ethToSend, address payable _charity) public payable {
+    function sendToCharity(uint _ethToSend, address payable _charity) external payable {
         // address.send(ethToSend);
         // charity.call.value(ethToSend)();
-        _charity.transfer(_ethToSend);
+        // _charity.transfer(_ethToSend);
+        _charity.transfer(1 ether);
+        emit SentToCharity(_ethToSend, _charity);
     }
 
     // TODO eventually update memory with an implementation of IPFS so we aren't storing all this on the blockchain

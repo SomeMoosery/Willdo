@@ -101,7 +101,7 @@ class App extends Component {
     // Send eth to chore creation contract
     await this.state.web3.eth.sendTransaction({
       from: account,
-      to: "0x0b9fb8FA6a82ba7eFDbFFfB0c7ff5350932e5514",
+      to: "0x0f594c1844eBC499329bE878c1c2B1D2E7DA2803",
       value: this.state.web3.utils.toWei(chorePrice, "ether")
     }).on('error', () => {
       alert('Error, or you rejected the transaction')

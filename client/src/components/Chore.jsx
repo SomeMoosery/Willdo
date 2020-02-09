@@ -13,7 +13,10 @@ class Chore extends React.Component {
     // https://www.coolearth.org/cryptocurrency-donations/
     async sendToCharity() {
         console.log('send', this.props.contract.methods)
-        await this.props.contract.methods.sendToCharity(this.price, "0x5798F4232Af37FBBa9AF51b7Ab8918376984A196").send({ from: "0x0b9fb8FA6a82ba7eFDbFFfB0c7ff5350932e5514" })
+        console.log('price:', this.price)
+        await this.props.contract.methods.sendToCharity(this.price, "0x5798F4232Af37FBBa9AF51b7Ab8918376984A196").send({ from: "0x0b9fb8FA6a82ba7eFDbFFfB0c7ff5350932e5514" }).on('receipt', function(receipt){
+            console.log(receipt)
+        })
     }
 
     render() {
