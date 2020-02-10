@@ -26,6 +26,7 @@ class App extends Component {
 
       // Use web3 to get the user's accounts.
       const accounts = await web3.eth.getAccounts();
+      const contractBalance = await web3.eth.getBalance("0x5C599bab0b5a1db22CE43ef4B3f888A672BCfEE8")/1000000000000000000
 
       // Get the contract instance.
       const networkId = await web3.eth.net.getId();
@@ -37,6 +38,9 @@ class App extends Component {
 
       // Set web3, accounts, and contract to the state
       this.setState({ web3, accounts, contract: instance });
+      this.setState({
+        contractBalance: contractBalance
+      })
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
@@ -127,6 +131,7 @@ class App extends Component {
     return (
       <div className="App">
         <h2>Willdo - You'll do it if there's money on the line</h2>
+        <p>Contract has: {this.state.contractBalance} ether in it</p>
         <Form layout="inline" onSubmit={(e) => this.createChore(e)}>
           <Form.Item>
             <input id="choreName" value={this.state.value} onChange={(e) => this.handleChange(e)} type="text" placeholder="Streak Name" required /><br />
