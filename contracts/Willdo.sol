@@ -43,14 +43,14 @@ contract Willdo {
 
     // Transfers the appropriate amount of money to the charity we're currently donating to
     function sendToCharity(uint amount, address payable _charity) external payable {
-        _charity.transfer(amount * 1 ether);
+        _charity.transfer(amount);
         emit SentToCharity(amount, _charity);
     }
 
     // TODO test to see if changing this to public will make a difference, but I feel like we want this external anyway
     // TODO test to see if we actually need this 1 ether thing or if I was just being a dumbass before
-    function returnToUser(uint256 amount) external payable {
-        msg.sender.transfer(amount * 1 wei);
+    function returnToUser(uint amount) external payable {
+        msg.sender.transfer(amount);
         emit ReturnedToUser(amount);
     }
 

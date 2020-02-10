@@ -12,7 +12,10 @@ class Chore extends React.Component {
     // https://350.org/other-ways-to-give/
     // https://www.coolearth.org/cryptocurrency-donations/
     async sendToCharity() {
-        await this.props.contract.methods.sendToCharity(this.price, "0x5798F4232Af37FBBa9AF51b7Ab8918376984A196").send({ from: "0x0b9fb8FA6a82ba7eFDbFFfB0c7ff5350932e5514" }).on('receipt', (receipt) => {
+        const daysLeft = getDays(this.endTime - new Date().getTime())
+        const totalDays = getDays(this.endTime - this.startTime)
+        const amount = this.props.web3.utils.toWei((daysLeft/totalDays).toString(), "ether")
+        await this.props.contract.methods.sendToCharity(amount, "0x5798F4232Af37FBBa9AF51b7Ab8918376984A196").send({ from: "0x0b9fb8FA6a82ba7eFDbFFfB0c7ff5350932e5514" }).on('receipt', () => {
             window.location.reload()
         })
     }
@@ -22,16 +25,11 @@ class Chore extends React.Component {
 
         const daysLeft = getDays(this.endTime - new Date().getTime())
         const totalDays = getDays(this.endTime - this.startTime)
-        console.log('Days Left:', daysLeft)
-        console.log('Total Days:', totalDays)
         const amount = this.props.web3.utils.toWei((daysLeft/totalDays).toString(), "ether")
-        console.log('Amount:', amount)
         await this.props.contract.methods.returnToUser(amount).send({
             from: "0x0b9fb8FA6a82ba7eFDbFFfB0c7ff5350932e5514"
         }).on('receipt', (receipt) => {
-            console.log(receipt)
-            // TODO reload when we know this is working
-            // window.location.reload()
+            window.location.reload()
         })
     }
 
